@@ -1,0 +1,60 @@
+{{template "header" .}}
+
+{{define "title"}}Login{{end}}
+<div id="content" class="ui text container">
+
+  <div id="okta-signin-widget-container"></div>
+  <script type="text/javascript">
+    const widgetConfig = {
+      baseUrl: "{{ .BaseUrl }}",
+      clientId: "{{ .ClientId }}",
+      redirectUri: "{{ .RedirectURI }}",
+      authParams: {
+        issuer: "{{ .Issuer }}",
+        scopes: ['openid', 'profile', 'email'],
+      },
+      useInteractionCodeFlow: true,
+      state: ("{{ .State }}" || false),
+      interactionHandle: "{{ .InteractionHandle }}",
+      codeChallenge: "{{ .CodeChallenge }}",
+      codeChallengeMethod: "{{ .CodeChallengeMethod }}",
+      otp: "{{ .OTP }}",
+      debug: true,
+      // language: "{{ .Lang  }}",
+      flow: 'unlockAccount',
+      i18n: {
+      // Overriding English properties
+      'en': {
+        'primaryauth.title': 'Sign in to Atko Sites ',
+        'primaryauth.username.placeholder': 'Your Acme Username'
+      },
+      // Overriding Japanese properties
+      'ja': {
+        'primaryauth.title': 'ATKOSにサインイン',
+        'primaryauth.username.placeholder': 'ACMEのユーザー名'
+      }
+      },
+      // Loading the assets from a path on the current domain
+      assets: {
+        languages: [
+          'tr',
+          'en',
+        ],
+        baseUrl: 'static/assets/dist'
+      },
+    };
+    const signIn = new OktaSignIn({
+      el: '#okta-signin-widget-container',
+      ...widgetConfig
+    });
+    signIn.showSignInAndRedirect()
+      .catch(err => {
+        console.log('Error in showSignInAndRedirect: ', err);
+      });
+  </script>
+
+  {{ if .Error}}
+    {{.Error}}
+  {{ end }}
+</div>
+{{template "footer"}}

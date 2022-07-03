@@ -1,0 +1,36 @@
+{{template "header" .}}
+
+<div id="content" class="ui text container">
+  <h2>Okta Self Hosted Login with Golang Gin Example</h2>
+
+  {{if .IsAuthenticated}}
+  <div>
+    <p>
+      Welcome back, <span>{{.Profile.name}}</span
+      >!
+    </p>
+    <p>You have successfully authenticated against your Okta org.</p>
+    <p>
+      Visit the <a href="profile">My Profile</a> page in this application to view the information retrieved with your OAuth Access Token.
+    </p>
+  </div>
+  {{else}}
+  <div>
+    <p>Hello!</p>
+    <p>If you're viewing this page then you have successfully configured and started this example server.</p>
+    <p>This example shows you how to embed a Sign In Widget into your Golang + Gin application.</p>
+    <p>
+      The Sign In Widget is powered by <a href="https://developer.okta.com/docs/concepts/ie-intro/">Okta's Identity Engine</a> and will adjust your user experience based on policies.  Once integrated, you will be able to utilize all the features of Okta's Sign In Widget in your application.
+    </p>
+  </div>
+
+  <form method="get" action="login">
+    <button id="login-button" class="btn btn-primary" type="submit">Login</button>
+  </form>
+  {{ end }}
+
+  {{ if .Error}}
+    {{.Error}}
+  {{ end }}
+</div>
+{{template "footer"}}
